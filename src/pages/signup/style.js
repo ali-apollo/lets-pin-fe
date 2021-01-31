@@ -70,7 +70,7 @@ const InputBox = styled.div`
   font-size: 18px;
   box-shadow: 0 2px 15px 0 rgba(0,0,0,.15);
   input {
-    width: 240px;
+    width: 200px;
     height: 30px;
     line-height: 30px;
     letter-spacing: .8px;

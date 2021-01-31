@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import {
   HomeWarpper,
@@ -20,10 +20,10 @@ import { connect } from 'react-redux'
 import Help from './components/Help/'
 import Leave from './components/Leave/'
 import halo from "../../lib/helloText"
-import {listenToken, removeSocket} from '../../lib/ws'
+import { listenToken, removeSocket } from '../../lib/ws'
 
 function Homepage(props) {
-  const {username, haloText, token} = props;
+  const { username, haloText, token } = props;
   const [handleHelp, setHandleHelp] = useState(false);
   const [handleLeave, setHandleLeave] = useState(false);
 
@@ -38,7 +38,11 @@ function Homepage(props) {
   const clearLogin = () => {
     window.localStorage.removeItem('status');
     window.localStorage.removeItem('token');
-    window.localStorage.removeItem('username');
+
+    if (!JSON.parse(window.localStorage.getItem('remember'))) {
+      window.localStorage.removeItem('username');
+    }
+
     window.location.reload();
   };
 
@@ -47,7 +51,7 @@ function Homepage(props) {
       console.log(res)
     })
     return () => removeSocket('token')
-  },[])
+  }, [])
 
   return (
     <HomeWarpper>
@@ -60,25 +64,25 @@ function Homepage(props) {
       <TextContainer>
         <Link to="/new/">
           <Item>
-            <AddIcon/>
+            <AddIcon />
             <Text>创建队伍</Text>
           </Item>
         </Link>
         <Link to="/join/">
           <Item>
-            <JoinIcon/>
+            <JoinIcon />
             <Text>加入队伍</Text>
           </Item>
         </Link>
         <Link to="/sort/">
           <Item>
-            <RankIcon/>
+            <RankIcon />
             <Text>查看排名</Text>
           </Item>
         </Link>
       </TextContainer>
-      <HelpButton onClick={()=>setHandleHelp(true)}>帮助</HelpButton>
-      <LeaveButton onClick={()=>setHandleLeave(true)}>离开</LeaveButton>
+      <HelpButton onClick={() => setHandleHelp(true)}>帮助</HelpButton>
+      <LeaveButton onClick={() => setHandleLeave(true)}>离开</LeaveButton>
       <Help
         handleHelp={handleHelp}
         closeHelp={closeHelp}

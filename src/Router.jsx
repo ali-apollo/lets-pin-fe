@@ -8,6 +8,7 @@ import Room from './pages/room'
 import Join from './pages/join'
 import Sort from './pages/sort'
 import Result from './pages/result'
+import Signup from './pages/signup'
 import { connect } from 'react-redux'
 
 const RoutesList = [
@@ -55,6 +56,11 @@ const RoutesList = [
     path: "/result/",
     component: Result,
     auth: true,
+  },
+  {
+    path: "/signup",
+    component: Signup,
+    auth: false,
   },
   {
     path: "*",

@@ -4,16 +4,18 @@ import {
   SET_TOKEN,
   UPDATE_MSG,
   SET_STATUS,
-  SET_NAME
+  SET_NAME,
+  SET_REMEMBER
 } from './constants'
 
 const defaultState = {
   username: window.localStorage.getItem('username'),
   token: window.localStorage.getItem('token'),
-  userId: '',
+  userId: window.localStorage.getItem('username') || '',
   password: '',
   message: '',
   status: window.localStorage.getItem('status'),
+  remember: window.localStorage.getItem('remember'),
 };
 
 export default (state = defaultState, action) => {
@@ -36,6 +38,10 @@ export default (state = defaultState, action) => {
       return newState
     case UPDATE_MSG:
       newState.message = action.value
+      return newState
+    case SET_REMEMBER:
+      newState.remember = action.value
+      window.localStorage.setItem('remember', action.value)
       return newState
     default:
       return newState

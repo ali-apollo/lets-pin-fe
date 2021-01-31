@@ -4,7 +4,8 @@ import {
   SET_TOKEN,
   UPDATE_MSG,
   SET_STATUS,
-  SET_NAME
+  SET_NAME,
+  SET_REMEMBER
 } from './constants'
 import post from '../../../lib/post'
 import get from "../../../lib/get";
@@ -40,10 +41,15 @@ export const onPasswordChangeAction = (value) => ({
   value
 });
 
+export const setRemember = (value) => ({
+  type: SET_REMEMBER,
+  value
+})
+
 const getUsernameAsyncAction = (token) => {
   return dispatch => {
     new Promise(resolve => {
-      let ret = get('https://os.ncuos.com/api/user/profile/index', token);
+      let ret = get('http://localhost:7001/users/info', token);
       resolve(ret)
     })
       .then(ret => {
@@ -67,18 +73,19 @@ export const loginAsyncAction = (userId, password) => {
       password
     };
     new Promise(resolve => {
-      let ret = post('https://os.ncuos.com/api/user/token', data, '');
+      let ret = post('http://localhost:7001/users/login', data, '');
       resolve(ret)
     })
       .then(ret => {
+        console.log(ret)
         dispatch(setStatusAction(ret.status));
-        if(ret.status === 1){
+        if(ret.status === 1) {
           window.localStorage.setItem('token', ret.token);
           window.localStorage.setItem('status', ret.status);
           dispatch(getUsernameAsyncAction(ret.token));
           dispatch(setTokenAction(ret.token));
           dispatch(updateStatusMessage(ret.message));
-        }else {
+        } else {
           dispatch(updateStatusMessage(ret.message));
         }
       })

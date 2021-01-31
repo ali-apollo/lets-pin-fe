@@ -7,7 +7,7 @@ async function get(path, token) {
     axios({
       method: 'get',
       url,
-      headers: {'Authorization': `passport ${token}`}
+      headers: {'Authorization': `Bearer ${token}`}
     })
     .then(res => resolve(res.data))
   })

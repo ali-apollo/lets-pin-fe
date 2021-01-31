@@ -4,20 +4,23 @@ import {
   Content,
   UserIdInputBox,
   PwdInputBox,
+  RememberMeBox,
   InputName,
   LoginBtn,
   LoginWrapper,
   Prompt,
   Title,
   MainPicture,
-  SecondPicture
+  SecondPicture,
+  BtnBox
 } from './style'
 import {connect} from 'react-redux'
 import {actionCreator} from './store'
-import {Redirect} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 
-function LoginPage({userId, password, message, status, onChangeUserId, onChangePassword, login}) {
+function LoginPage({userId, password, message, status, remember, onChangeUserId, onChangePassword, login, setRemember}) {
   const [height, setHeight] = useState(document.documentElement.clientHeight);
+
   return (
     <LoginWrapper style={{height: `${height}px`}}>
       <MainPicture/>
@@ -43,20 +46,33 @@ function LoginPage({userId, password, message, status, onChangeUserId, onChangeP
             onChange={e => onChangePassword(e)}
           />
         </PwdInputBox>
+        <RememberMeBox>
+          <InputName>记住我</InputName>
+          <input
+            type="checkbox"
+            checked={JSON.parse(remember)}
+            onChange={e => setRemember(e)}
+          />
+        </RememberMeBox>
         <Prompt active={message}>{message}</Prompt>
-        <LoginBtn onClick={() => login(userId, password)}>登录</LoginBtn>
+        <BtnBox>
+          <LoginBtn><Link to="/signup/">注册</Link></LoginBtn>
+          <LoginBtn onClick={() => login(userId, password)}>登录</LoginBtn>
+        </BtnBox>
       </Content>
-      {status ? <Redirect to={"/home/"}/> : null}
+      {status === 1 ? <Redirect to={"/home/"}/> : null}
     </LoginWrapper>
   );
 }
 
 const mapStateToProps = state => {
+  console.log(state)
   return {
     userId: state.login.userId,
     password: state.login.password,
     message: state.login.message,
     status: state.login.status,
+    remember: state.login.remember,
   }
 };
 
@@ -70,6 +86,9 @@ const mapDispatchToProps = dispatch => {
     },
     login(userId, password) {
       dispatch(actionCreator.loginAsyncAction(userId, password))
+    },
+    setRemember(e) {
+      dispatch(actionCreator.setRemember(e.target.checked))
     }
   }
 };
